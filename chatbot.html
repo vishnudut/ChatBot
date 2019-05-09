@@ -53,9 +53,139 @@
                 text: 'International',
                 value: 'International'
               }]
+            })
+          }).then(function () {
+            botui.action.button({
+              action: [{
+                text: 'Existing pakcage',
+                value: 'existingPackage'
+              }, {
+                text: 'Create your own package',
+                value: 'ownPackage'
+              }]
             }).then(function (res) {
-              console.log(res.value);
-            });
+              if (res.value == 'ownPackage') {
+                botui.message.add({
+                  content: "Do you have a destination in mind?"
+                }).then(function () {
+                  botui.action.button({
+                    action: [{
+                      text: 'Yes',
+                      value: 'yes'
+                    }, {
+                      text: 'No',
+                      value: 'no'
+                    }]
+                  }).then(function (res) {
+                    if (res.value == 'yes') {
+                      botui.message.add({
+                        content: 'Enter your destination?'
+                      }).then(function () {
+                        return botui.action.text({
+                          action: {
+                            placeholder: 'Your Destination'
+                          }
+                        });
+                      }).then(function (res) {
+                        botui.message.add({
+                          content: 'Your selected Destination is ' + res.value
+                        });
+                      }).then(function () {
+                        botui.message.add({
+                          content: "No of people"
+                        }).then(function () {
+                          botui.action.button({
+                            action: [{
+                              text: 'One',
+                              value: '1'
+                            }, {
+                              text: 'Two',
+                              value: '2'
+                            }, {
+                              text: 'Three',
+                              value: '3'
+                            }, {
+                              text: 'Four',
+                              value: '4'
+                            }, {
+                              text: 'Five',
+                              value: '5'
+                            }, {
+                              text: '>5',
+                              value: 'More than 5'
+                            }]
+                          }).then(function (res) {
+                            console.log(res.value);
+                          }).then(function () {
+                            botui.message.add({
+                              content: 'Enter your trip start and end date'
+                            }).then(function () {
+                              return botui.action
+                                .text({
+                                  action: {
+                                    placeholder: 'Start date - End dated'
+                                  }
+                                });
+                            }).then(function (res) {
+                              botui.message.add({
+                                content: 'Your trip is from  ' + res
+                                  .value
+                              });
+                            }).then(function () {
+                              botui.action.select({
+                                action: {
+                                  placeholder: "Select your facility Reauirement",
+                                  value: 'null', // Selected value or Selected Array object. Example: [{value: "TR", text : "Türkçe" },{value: "EN", text : "English" }]
+                                  multipleselect: true, // Default: false
+                                  options: [{
+                                      value: "hotel",
+                                      text: "Hotel"
+                                    },
+                                    {
+                                      value: "transport",
+                                      text: "Transport"
+                                    },
+                                    {
+                                      value: "cab",
+                                      text: "Cab"
+                                    },
+
+                                  ],
+                                }
+                              }).then(function (
+                              res) { // will be called when a button is clicked.
+                                console.log(res.value); // will print "one" from 'value'
+              
+                                if (res.value == 'hotel') {
+                                  botui.action.button({
+                                    action: [{
+                                      text: '1 star',
+                                      value: 'one star'
+                                    }, {
+                                      text: '2 star',
+                                      value: 'two star'
+                                    }, {
+                                      text: '3 star',
+                                      value: 'three star'
+                                    }, {
+                                      text: '4 star',
+                                      value: 'four star'
+                                    }, {
+                                      text: '5 star',
+                                      value: 'five star'
+                                    }]
+                                  })
+                                }
+                              });
+                            })
+                          })
+                        })
+                      })
+                    }
+                  })
+                })
+              }
+            })
           })
         })
       });
