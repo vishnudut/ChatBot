@@ -3,10 +3,11 @@
 
 <head>
   <meta charset="utf-8">
-  <title>BotUI - Hello World</title>
+  <title>ChatBot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/botui/build/botui.min.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/botui/build/botui-theme-default.css" />
+
 </head>
 
 <body>
@@ -65,131 +66,351 @@
               }]
             }).then(function (res) {
               if (res.value == 'ownPackage') {
+                ownPackage();
+              } else {
                 botui.message.add({
-                  content: "Do you have a destination in mind?"
-                }).then(function () {
-                  botui.action.button({
-                    action: [{
-                      text: 'Yes',
-                      value: 'yes'
-                    }, {
-                      text: 'No',
-                      value: 'no'
-                    }]
-                  }).then(function (res) {
-                    if (res.value == 'yes') {
-                      botui.message.add({
-                        content: 'Enter your destination?'
-                      }).then(function () {
-                        return botui.action.text({
-                          action: {
-                            placeholder: 'Your Destination'
-                          }
-                        });
-                      }).then(function (res) {
-                        botui.message.add({
-                          content: 'Your selected Destination is ' + res.value
-                        });
-                      }).then(function () {
-                        botui.message.add({
-                          content: "No of people"
-                        }).then(function () {
-                          botui.action.button({
-                            action: [{
-                              text: 'One',
-                              value: '1'
-                            }, {
-                              text: 'Two',
-                              value: '2'
-                            }, {
-                              text: 'Three',
-                              value: '3'
-                            }, {
-                              text: 'Four',
-                              value: '4'
-                            }, {
-                              text: 'Five',
-                              value: '5'
-                            }, {
-                              text: '>5',
-                              value: 'More than 5'
-                            }]
-                          }).then(function (res) {
-                            console.log(res.value);
-                          }).then(function () {
-                            botui.message.add({
-                              content: 'Enter your trip start and end date'
-                            }).then(function () {
-                              return botui.action
-                                .text({
-                                  action: {
-                                    placeholder: 'Start date - End dated'
-                                  }
-                                });
-                            }).then(function (res) {
-                              botui.message.add({
-                                content: 'Your trip is from  ' + res
-                                  .value
-                              });
-                            }).then(function () {
-                              botui.action.select({
-                                action: {
-                                  placeholder: "Select your facility Reauirement",
-                                  value: 'null', // Selected value or Selected Array object. Example: [{value: "TR", text : "Türkçe" },{value: "EN", text : "English" }]
-                                  multipleselect: true, // Default: false
-                                  options: [{
-                                      value: "hotel",
-                                      text: "Hotel"
-                                    },
-                                    {
-                                      value: "transport",
-                                      text: "Transport"
-                                    },
-                                    {
-                                      value: "cab",
-                                      text: "Cab"
-                                    },
-
-                                  ],
-                                }
-                              }).then(function (
-                              res) { // will be called when a button is clicked.
-                                console.log(res.value); // will print "one" from 'value'
-              
-                                if (res.value == 'hotel') {
-                                  botui.action.button({
-                                    action: [{
-                                      text: '1 star',
-                                      value: 'one star'
-                                    }, {
-                                      text: '2 star',
-                                      value: 'two star'
-                                    }, {
-                                      text: '3 star',
-                                      value: 'three star'
-                                    }, {
-                                      text: '4 star',
-                                      value: 'four star'
-                                    }, {
-                                      text: '5 star',
-                                      value: 'five star'
-                                    }]
-                                  })
-                                }
-                              });
-                            })
-                          })
-                        })
-                      })
-                    }
-                  })
-                })
+                  type:'html',
+                  content: 'Check the packages here   <a href="https://www.visiit.com/">Visiit Packages</a> '
+                });
               }
             })
           })
         })
       });
     })
+
+
+    function cus_deet() {
+
+      botui.message.add({
+        content: "Please enter your e-mail id"
+      }).then(function () {
+        botui.action.text({
+          action: {
+            sub_type: 'email',
+            placeholder: 'Enter your text here'
+          }
+        }).then(function () {
+          botui.message.add({
+            content: "Please enter your mobile number "
+          }).then(function () {
+            botui.action.text({
+              action: {
+                sub_type: 'number',
+                placeholder: 'Enter your phone number here'
+              }
+            }).then(function () {
+              botui.message.add({
+                content: " At what time you want our expert to contact you ?"
+              }).then(function () {
+                botui.action.button({
+                  action: [{
+                      text: '11AM - 1PM',
+                      value: '11AM - 1PM'
+                    },
+                    {
+                      text: '2PM - 4PM',
+                      value: '2PM - 4PM'
+                    },
+                    {
+                      text: '4:30PM - 6:30PM',
+                      value: '4:30PM - 6:30PM'
+                    },
+                    {
+                      text: 'Other timings ?',
+                      value: 'otherTime'
+                    }
+                  ]
+                }).then(function (res) {
+                  if (res.value == 'otherTime') {
+                    botui.message.add({
+                      content: "Please enter the time you have in mind "
+                    }).then(function () {
+                      botui.action.text({
+                        action: {
+                          placeholder: 'Enter your time here'
+                        }
+                      }).then(function () {
+                        botui.message.add({
+                          content: "Would you like to have the summary of your package to your mobile phone ?"
+                        }).then(function () {
+                          botui.action.button({
+                            action: [{
+                                text: "Yes",
+                                value: 'yes_summary'
+                              },
+                              {
+                                text: "No",
+                                value: 'no_summary'
+                              }
+                            ]
+                          }).then(function (res) {
+                            if (res.value == 'yes_summary') {
+                              botui.message.add({
+                                content: "Noted, The summary will be sent to your mobile phone"
+                              }).then(function () {
+                                botui.message.add({
+                                  content: "Thank you for your patience, Our expert will contact you"
+                                })
+                              })
+                            } else {
+                              botui.message.add({
+                                content: "Thank you for your patience, Our expert will contact you"
+                              })
+                            }
+
+                          })
+                        })
+                      })
+                    })
+                  }
+                })
+              })
+
+            })
+          })
+
+        })
+      })
+    }
+
+
+    function ownPackage() {
+      botui.message.add({
+        content: "Do you have a destination in mind?"
+      }).then(function () {
+        botui.action.button({
+          action: [{
+            text: 'Yes',
+            value: 'yes'
+          }, {
+            text: 'No',
+            value: 'no'
+          }]
+        }).then(function (res) {
+          if (res.value == 'yes') {
+            botui.message.add({
+              content: 'Enter your destination?'
+            }).then(function () {
+              return botui.action.text({
+                action: {
+                  placeholder: 'Your Destination'
+                }
+              });
+            }).then(function (res) {
+              botui.message.add({
+                content: 'Your selected Destination is ' + res.value
+              });
+            }).then(function () {
+              botui.message.add({
+                content: "No of people"
+              }).then(function () {
+                botui.action.button({
+                  action: [{
+                    text: 'One',
+                    value: '1'
+                  }, {
+                    text: 'Two',
+                    value: '2'
+                  }, {
+                    text: 'Three',
+                    value: '3'
+                  }, {
+                    text: 'Four',
+                    value: '4'
+                  }, {
+                    text: 'Five',
+                    value: '5'
+                  }, {
+                    text: '>5',
+                    value: 'More than 5'
+                  }]
+                }).then(function (res) {
+                  console.log(res.value);
+                }).then(function () {
+                  botui.message.add({
+                    content: 'Enter your trip start date'
+                  }).then(function () {
+                    return botui.action.text({
+                      action: {
+                        sub_type: 'date',
+                        placeholder: 'Start date'
+                      }
+                    });
+                  }).then(function () {
+                    botui.message.add({
+                      content: 'Enter your end date'
+                    }).then(function () {
+                      return botui.action.text({
+                        action: {
+                          sub_type: 'date',
+                          placeholder: 'End Date'
+                        }
+                      })
+                    }).then(function () {
+                      botui.action.select({
+                        action: {
+                          placeholder: "Select your required facilities",
+                          //value: 'TR,EN', // Selected value or Selected Array object. Example: [{value: "TR", text : "Türkçe" },{value: "EN", text : "English" }]
+                          multipleselect: true, // Default: false
+                          options: [{
+                              value: "hotel",
+                              text: "Hotel"
+                            },
+                            {
+                              value: "transport",
+                              text: "Transport"
+                            },
+                            {
+                              value: "cab",
+                              text: "Cab"
+                            },
+
+                          ],
+                          button: {
+                            icon: 'check',
+                            label: 'OK'
+                          }
+                        }
+                      }).then(function (
+                        res
+                      ) { // will be called when a button is clicked.
+                        console.log(res
+                          .value
+                        ); // will print "one" from 'value'
+                        if (res.value == 'hotel' || res.value ==
+                          'cab, hotel' || res.value ==
+                          'hotel, cab') {
+                          botui.message.add({
+                            content: "Which type of hotel do you prefer?"
+                          }).then(function () {
+                            botui.action.button({
+                              action: [{
+                                  text: '1 Star',
+                                  value: 'one star'
+                                },
+                                {
+                                  text: '2 Star',
+                                  value: 'two star'
+                                },
+                                {
+                                  text: '3 Star',
+                                  value: 'three star'
+                                },
+                                {
+                                  text: '4 Star',
+                                  value: 'four star'
+                                },
+                                {
+                                  text: '5 Star',
+                                  value: 'five star'
+                                }
+                              ]
+                            }).then(function () {
+                              cus_deet();
+                            });
+                          })
+
+                        }
+                        if (res.value == 'transport' || res
+                          .value == 'cab, transport' || res
+                          .value == 'transport, cab') {
+                          botui.message.add({
+                            content: "Which mode of transport do you prefer?"
+                          }).then(function () {
+                            botui.action.button({
+                              action: [{
+                                  text: "Train",
+                                  value: 'train'
+                                },
+                                {
+                                  text: "Flight",
+                                  value: 'flight'
+                                },
+                                {
+                                  text: "Bus",
+                                  value: 'bus'
+                                }
+                              ]
+                            }).then(function () {
+                              cus_deet();
+                            })
+                          })
+                        }
+                        if (res.value == 'transport, hotel' ||
+                          res.value == 'hotel, transport' || res
+                          .value == 'cab, hotel, transport' ||
+                          res.value ==
+                          'hotel, cab, transport' || res
+                          .value == 'transport, hotel, cab' ||
+                          res.value ==
+                          'cab, transport, hotel' || res
+                          .value == 'hotel, transport, cab' ||
+                          res.value == 'transport, cab, hotel'
+                        ) {
+
+                          botui.message.add({
+                            content: "Which type of hotel do you prefer ?"
+                          }).then(function () {
+                            botui.action.button({
+                              action: [{
+                                  text: '1 Star',
+                                  value: 'one star'
+                                },
+                                {
+                                  text: '2 Star',
+                                  value: 'two star'
+                                },
+                                {
+                                  text: '3 Star',
+                                  value: 'three star'
+                                },
+                                {
+                                  text: '4 Star',
+                                  value: 'four star'
+                                },
+                                {
+                                  text: '5 Star',
+                                  value: 'five star'
+                                }
+                              ]
+                            }).then(function () {
+                              botui.message.add({
+                                content: "Which mode of transport do you prefer?"
+                              }).then(function () {
+                                botui.action
+                                  .button({
+                                    action: [{
+                                        text: "Train",
+                                        value: 'train'
+                                      },
+                                      {
+                                        text: "Flight",
+                                        value: 'flight'
+                                      },
+                                      {
+                                        text: "Bus",
+                                        value: 'bus'
+                                      }
+                                    ]
+                                  }).then(
+                                    function () {
+                                      cus_deet();
+                                    })
+                              })
+                            })
+                          })
+                        }
+                      });
+                    })
+                  })
+                })
+              })
+            })
+          }
+        })
+      })
+    }
   </script>
 </body>
 
