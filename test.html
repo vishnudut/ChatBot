@@ -26,7 +26,8 @@
         var botui = new BotUI('hello-world');
 
         var trip_type,package_type,user_number,user_mail,user_destination,no_of_people,tentative_date,trip_duration,req_facilities,transport_type,
-        hotel_preference,first_contact_deet,cust_call_time,summary_req;
+        hotel_preference,first_contact_deet,cust_call_time,summary_req,trip_style,location_domain;
+
 
         // Start Bot
         // First Messages
@@ -66,6 +67,8 @@
             }
         })
 
+
+
         function cus_deet() {
             botui.message.add({
                 content: "Please enter your mobile number"
@@ -75,7 +78,10 @@
                         sub_type: 'number',
                         placeholder: 'Enter your mobile number here'
                     }
-                });
+                }).then(function(res){
+                    user_number = res.value;
+                    console.log(user_number);
+                })
             }).then(function(){
                 return botui.message.add({
                     content:"Please enter your email-id"
@@ -85,6 +91,9 @@
                             sub_type:'email',
                             placeholder:'Enter your mail id here'
                         }
+                    }).then(function(res){
+                        user_mail = res.value;
+                        console.log(user_mail);
                     })
                 })
             }).then(function(){
@@ -96,7 +105,7 @@
             })
         }
 
-
+        // Questions for customer
         function questions() {
             botui.message.add({
                 content:"What type of trip are you looking forward to ?"
@@ -152,6 +161,8 @@
 
         }
 
+        // OWN PACKAGE 
+
         function ownPackage(){
             botui.message.add({
                 content:"Do you have a destination in your mind ?"
@@ -185,10 +196,266 @@
                             content: 'Your destination is ' + user_destination
                         })
                     }).then(function(){
-                        return botui.message.add({
-                            content:"No of people in the trip ?"
+                        ownPack_commonPart();
+                    })
+                }else{
+                    return botui.message.add({
+                        content:"Okay.. Are you looking for an International trip or within India?"
+                    }).then(function(){
+                        return botui.action.button({
+                            action:[
+                                {text:"International trip",value:"International"},
+                                {text:"within India",value:"India"}
+                            ]
+                        }).then(function(res){
+                            location_domain = res.value;
+                            console.log(location_domain);
                         })
                     }).then(function(){
+                        if(location_domain == 'International'){
+                            International();
+                        }else{
+                            India();
+                        }
+                    })    
+                }
+            })
+        }
+
+        // Function for International option in own Package 
+        // Will be called only when the user selects he doesn't have an option for destination in mind 
+
+        function International(){
+            botui.message.add({
+                        content:"What kind of trip are you looking forward to go ?"
+                    }).then(function(){
+                        return botui.action.button({
+                            action:[
+                                {
+                                    text:"Adventure",
+                                    value:'adventure'
+                                },
+                                {
+                                    text:"Leisure",
+                                    value:"leisure"
+                                },
+                                {
+                                    text:"Hill Stations",
+                                    value:"hillStation"
+                                },
+                                {
+                                    text:"Romantic",
+                                    value:"romantic"
+                                },
+                                {
+                                    text:"Beaches",
+                                    value:"beaches"
+                                },
+                                {
+                                    text:"Nature",
+                                    value:"Nature"
+                                }
+                            ]
+                        }).then(function(res){
+                            trip_style = res.value;
+                            console.log(trip_style);
+                        })
+                    }).then(function(){
+                        return botui.message.add({
+                            content:"Based on your requirements, here are some suggested destinations"
+                        })
+                    }).then(function(){
+                        return botui.message.add({
+                            content:"Please select the one that you prefer"
+                        })
+                    }).then(function(){
+                        if(trip_style == 'adventure'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Thailand",value:"thailand"},
+                                    {text:"Europ",value:"europ"},
+                                    {text:"Bhutan",value:"bhutan"},
+                                    {text:"Australia",value:"australia"},
+                                    {text:"New Zeland",value:"new zeland"},
+                                ]
+                            })
+                        }else if(trip_style == 'leisure'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Thailand",value:"thailand"},
+                                    {text:"Sri Lanka",value:"srilanka"},
+                                    {text:"Singapore",value:"singapore"},
+                                    {text:"Europe",value:"europe"},
+                                    {text:"Dubai",value:"dubai"},
+                                ]
+                            })
+                        }else if(trip_style == 'hillStation'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Thailand",value:"thailand"},
+                                    {text:"Sri Lanka",value:"srilanka"},
+                                    {text:"Singapore",value:"singapore"},
+                                    {text:"Europe",value:"europe"},
+                                    {text:"Dubai",value:"dubai"},
+                                ]
+                            })
+                        }else if(trip_style == 'romantic'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Bali",value:"bali"},
+                                    {text:"Italy",value:"italy"},
+                                    {text:"France",value:"france"},
+                                    {text:"Iceland",value:"iceland"},
+                                    {text:"Greece",value:"greece"},
+                                ]
+                            })
+                        }else if(trip_style == 'beaches'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Bali",value:"bali"},
+                                    {text:"Maldives",value:"maldives"},
+                                    {text:"Spain",value:"spain"},
+                                    {text:"Australia",value:"australia"},
+                                    {text:"Fiji",value:"fiji"},
+                                ]
+                            })
+                        }else if(trip_style == 'nature'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"America",value:"america"},
+                                    {text:"Greece",value:"greece"},
+                                    {text:"Croatia",value:"croatia"},
+                                    {text:"Italy",value:"italy"},
+                                ]
+                            })
+                        }
+                    }).then(function(res){
+                        user_destination = res.value;
+                        console.log(user_destination)
+                    }).then(function(){
+                        ownPack_commonPart();
+                    })
+        }
+
+
+        function India(){
+            botui.message.add({
+                        content:"What kind of trip are you looking forward to go ?"
+                    }).then(function(){
+                        return botui.action.button({
+                            action:[
+                                {
+                                    text:"Adventure",
+                                    value:'adventure'
+                                },
+                                {
+                                    text:"Leisure",
+                                    value:"leisure"
+                                },
+                                {
+                                    text:"Hill Stations",
+                                    value:"hillStation"
+                                },
+                                {
+                                    text:"Romantic",
+                                    value:"romantic"
+                                },
+                                {
+                                    text:"Beaches",
+                                    value:"beaches"
+                                },
+                                {
+                                    text:"Nature",
+                                    value:"Nature"
+                                }
+                            ]
+                        }).then(function(res){
+                            trip_style = res.value;
+                            console.log(trip_style);
+                        })
+                    }).then(function(){
+                        return botui.message.add({
+                            content:"Based on your requirements, here are some suggested destinations"
+                        })
+                    }).then(function(){
+                        return botui.message.add({
+                            content:"Please select the one that you prefer"
+                        })
+                    }).then(function(){
+                        if(trip_style == 'adventure'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Andaman",value:"andaman"},
+                                    {text:"Coorg",value:"coorg"},
+                                    {text:"Himachal",value:"himachal"},
+                                    {text:"Ooty",value:"Ooty"},
+                                    {text:"Ladakh",value:"ladakh"},
+                                ]
+                            })
+                        }else if(trip_style == 'leisure'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Kerala",value:"kerala"},
+                                    {text:"Andaman",value:"andaman"},
+                                    {text:"Himachal",value:"himachal"},
+                                    {text:"Ladakh",value:"ladakh"},
+                                    {text:"Kashmir",value:"kashmir"},
+                                ]
+                            })
+                        }else if(trip_style == 'hillStation'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Kerala",value:"kerala"},
+                                    {text:"Kashmir",value:"kashmir"},
+                                    {text:"Ooty",value:"ooty"},
+                                    {text:"Himachal",value:"himachal"},
+                                    {text:"Assam",value:"assam"},
+                                ]
+                            })
+                        }else if(trip_style == 'romantic'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Kerala",value:"kerala"},
+                                    {text:"Andaman",value:"andaman"},
+                                    {text:"Shimla",value:"shimla"},
+                                    {text:"Allepey",value:"allepey"},
+                                    {text:"Ooty",value:"ooty"},
+                                    {text:"Coorg",value:"coorg"}
+                                ]
+                            })
+                        }else if(trip_style == 'beaches'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Goa",value:"goa"},
+                                    {text:"Andaman",value:"andaman"},
+                                    {text:"Kerala",value:"kerala"},
+                                ]
+                            })
+                        }else if(trip_style == 'nature'){
+                            return botui.action.button({
+                                action:[
+                                    {text:"Kerala",value:"kerala"},
+                                    {text:"Andaman",value:"andaman"},
+                                    {text:"Assam",value:"assam"},
+                                    {text:"Ladakh",value:"Ladakh"},
+                                    {text:"Kashmir",value:"kashmir"}
+                                ]
+                            })
+                        }
+                    }).then(function(res){
+                        user_destination = res.value;
+                        console.log(user_destination)
+                    }).then(function(){
+                        ownPack_commonPart();
+                    })
+        }
+
+
+
+        function ownPack_commonPart(){
+                    return botui.message.add({
+                        content:"No of people in the trip ?"
+                        }).then(function(){
                         return botui.action.button({
                             action:[
                                 {
@@ -510,7 +777,10 @@
                                                 sub_type: 'number',
                                                 placeholder: 'Enter your mobile number here'
                                             }
-                                        });
+                                        }).then(function(res){
+                                            user_number = res.value;
+                                            console.log(user_number);
+                                        })
                                     }).then(function(){
                                             return botui.message.add({
                                             content:"Please enter your email-id"
@@ -520,6 +790,9 @@
                                                     sub_type:'email',
                                                     placeholder:'Enter your mail id here'
                                                 }
+                                            }).then(function(res){
+                                                user_mail = res.value;
+                                                console.log(user_mail);
                                             })
                                         })
                                     }).then(function(){
@@ -528,15 +801,12 @@
                                         })
                                     }).then(function(){
                                         contact_summary();
-                                    })
-                            
+                                    })    
                         }
                     })
-                }
-            })
         }
 
-
+        // SUMMARY REQUIREMENT AND THANKING THE CUSTOMER
         function contact_summary(){
             return botui.message.add({
                                 content:"At what time do you want our expert to contact you ?"
