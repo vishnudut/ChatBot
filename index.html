@@ -1,20 +1,34 @@
+<!DOCTYPE html>
 <html>
-    <head>
-        <link  rel="stylesheet" href="https://unpkg.com/botui/build/botui.min.css">
-        <link rel="stylesheet" href="https://unpkg.com/botui/build/botui-theme-default.css">
-        <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
-        <script src="https://unpkg.com/botui/build/botui.min.js"></script>
-    </head>
-    <body>
-        <h1>Hello World</h1>
-        <div id="my-botui-app">
-            <bot-ui></bot-ui>
-        </div>
-    </body>
+  <head>
+    <meta charset="utf-8" />
+    <title>ChatBot</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, maximum-scale=1"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/botui/build/botui.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/botui/build/botui-theme-default.css"
+    />
+    <link rel="stylesheet" href="./chatbot style/botui.scss" />
+    <link rel="stylesheet" href="./chatbot style/default.scss" />
+    <link rel="stylesheet" href="./chatbot style/normal.scss" />
+    <link rel="stylesheet" href="./chatbot style/botui-theme-default.css" />
+  </head>
 
+  <body>
+    <div class="botui-app-container" id="hello-world">
+      <bot-ui></bot-ui>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/6.0.2/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/vue/latest/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/botui/build/botui.js"></script>
+    <script src="Chatbase.js"></script>
+    <script src="index.js"></script>
+  </body>
 </html>
-
-<script>
-    var botui = new BotUI('my-botui-app');
-
-</script>
