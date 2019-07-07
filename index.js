@@ -1,4 +1,5 @@
-var botui = new BotUI('hello-world')
+var botui = new BotUI('hello-world');
+
 var trip_type,
   package_type,
   user_number,
@@ -16,44 +17,9 @@ var trip_type,
   trip_style,
   location_domain
 
-var transport_type = null
-var hotel_preference = null
 
-//   var app = document.querySelector('.botui-app-container')
-//   var con = document.querySelector('.botui-container')
+  
 
-//   con.addEventListener('scroll', e => {
-//     console.log('scroll', e, con)
-//     e.stopPropagation()
-//     debounce(doTheScroll, 500, false)(e.target)
-//   })
-
-//   const doTheScroll = el => {
-//     console.log('doing the scrol')
-//     el.scrollTop = el.scrollHeight - el.offsetHeight
-//   }
-
-//   function debounce(func, wait, immediate) {
-//     var timeout
-
-//     return function executedFunction() {
-//       var context = this
-//       var args = arguments
-
-//       var later = function() {
-//         timeout = null
-//         if (!immediate) func.apply(context, args)
-//       }
-
-//       var callNow = immediate && !timeout
-
-//       clearTimeout(timeout)
-
-//       timeout = setTimeout(later, wait)
-
-//       if (callNow) func.apply(context, args)
-//     }
-//   }
 
 // Start Bot
 // First Messages
@@ -61,22 +27,21 @@ botui.message
   .bot({
     content: 'Hi there! 👋 I am Alexa ',
   })
-  .then(function() {
+  .then(function () {
     return botui.message.bot({
       content: "I'm here to help you.",
     })
   })
-  .then(function() {
+  .then(function () {
     return botui.message.add({
       loading: true,
       delay: 800,
       content: 'Would you like to share your contact details ?',
     })
   })
-  .then(function() {
+  .then(function () {
     return botui.action.button({
-      action: [
-        {
+      action: [{
           text: '👍 Yes',
           value: 'yes',
         },
@@ -87,7 +52,7 @@ botui.message
       ],
     })
   })
-  .then(function(res) {
+  .then(function (res) {
     first_contact_deet = res.value
     console.log(first_contact_deet)
     if (res.value == 'yes') {
@@ -97,11 +62,12 @@ botui.message
         .add({
           content: 'Ok 😓',
         })
-        .then(function() {
+        .then(function () {
           return questions()
         })
     }
   })
+
 function cus_deet() {
   botui.message
     .add({
@@ -109,7 +75,7 @@ function cus_deet() {
       delay: 500,
       content: 'Please enter your mobile number',
     })
-    .then(function() {
+    .then(function () {
       return botui.action
         .text({
           action: {
@@ -118,17 +84,17 @@ function cus_deet() {
             placeholder: 'Mobile number',
           },
         })
-        .then(function(res) {
+        .then(function (res) {
           user_number = res.value
           console.log(user_number)
         })
     })
-    .then(function() {
+    .then(function () {
       return botui.message
         .add({
           content: 'Please enter your email-id',
         })
-        .then(function() {
+        .then(function () {
           return botui.action
             .text({
               action: {
@@ -137,18 +103,18 @@ function cus_deet() {
                 placeholder: 'Mail id',
               },
             })
-            .then(function(res) {
+            .then(function (res) {
               user_mail = res.value
               console.log(user_mail)
             })
         })
     })
-    .then(function() {
+    .then(function () {
       return botui.message.add({
         content: 'Thanks for your details',
       })
     })
-    .then(function() {
+    .then(function () {
       questions()
     })
 }
@@ -160,10 +126,9 @@ function questions() {
       delay: 500,
       content: 'What type of trip are you looking forward to?',
     })
-    .then(function() {
+    .then(function () {
       return botui.action.button({
-        action: [
-          {
+        action: [{
             text: '👪 Family',
             value: 'family',
           },
@@ -178,21 +143,20 @@ function questions() {
         ],
       })
     })
-    .then(function(res) {
+    .then(function (res) {
       trip_type = res.value
       console.log(trip_type)
     })
-    .then(function() {
+    .then(function () {
       return botui.message
         .add({
           loading: true,
           delay: 400,
           content: 'What kind of package are you looking forward to ?',
         })
-        .then(function() {
+        .then(function () {
           return botui.action.button({
-            action: [
-              {
+            action: [{
                 text: '📦 Existing Package',
                 value: 'existingPackage',
               },
@@ -203,7 +167,7 @@ function questions() {
             ],
           })
         })
-        .then(function(res) {
+        .then(function (res) {
           package_type = res.value
           console.log(trip_type)
           if (res.value == 'existingPackage') {
@@ -212,10 +176,9 @@ function questions() {
                 loading: true,
                 delay: 400,
                 type: 'html',
-                content:
-                  'Check the packages here   <a href="https://www.visiit.com/">Visiit Packages</a> ',
+                content: 'Check the packages here   <a href="https://www.visiit.com/">Visiit Packages</a> ',
               })
-              .then(function() {
+              .then(function () {
                 firebaseOps.writeExist()
               })
           } else {
@@ -232,10 +195,9 @@ function ownPackage() {
       delay: 400,
       content: 'Do you have a destination in your mind ?',
     })
-    .then(function() {
+    .then(function () {
       return botui.action.button({
-        action: [
-          {
+        action: [{
             text: '👍 Yes',
             value: 'yes',
           },
@@ -246,7 +208,7 @@ function ownPackage() {
         ],
       })
     })
-    .then(function(res) {
+    .then(function (res) {
       if (res.value == 'yes') {
         botui.message
           .add({
@@ -254,7 +216,7 @@ function ownPackage() {
             delay: 400,
             content: 'Enter your destination in mind',
           })
-          .then(function() {
+          .then(function () {
             return botui.action.text({
               action: {
                 sub_type: 'text',
@@ -262,13 +224,13 @@ function ownPackage() {
               },
             })
           })
-          .then(function(res) {
+          .then(function (res) {
             user_destination = res.value
             botui.message.add({
               content: 'Your destination is ' + user_destination,
             })
           })
-          .then(function() {
+          .then(function () {
             ownPack_commonPart()
           })
       } else {
@@ -276,23 +238,27 @@ function ownPackage() {
           .add({
             loading: true,
             delay: 800,
-            content:
-              'Okay.. Are you looking for an International trip or within India?',
+            content: 'Okay.. Are you looking for an International trip or within India?',
           })
-          .then(function() {
+          .then(function () {
             return botui.action
               .button({
-                action: [
-                  { text: 'International trip', value: 'International' },
-                  { text: 'within India', value: 'India' },
+                action: [{
+                    text: 'International trip',
+                    value: 'International'
+                  },
+                  {
+                    text: 'within India',
+                    value: 'India'
+                  },
                 ],
               })
-              .then(function(res) {
+              .then(function (res) {
                 location_domain = res.value
                 console.log(location_domain)
               })
           })
-          .then(function() {
+          .then(function () {
             if (location_domain == 'International') {
               International()
             } else {
@@ -311,11 +277,10 @@ function International() {
       delay: 1000,
       content: 'What kind of trip are you looking forward to go ?',
     })
-    .then(function() {
+    .then(function () {
       return botui.action
         .button({
-          action: [
-            {
+          action: [{
               text: '🚵 Adventure',
               value: 'adventure',
             },
@@ -341,96 +306,177 @@ function International() {
             },
           ],
         })
-        .then(function(res) {
+        .then(function (res) {
           trip_style = res.value
           console.log(trip_style)
         })
     })
-    .then(function() {
+    .then(function () {
       return botui.message.add({
         loading: true,
         delay: 400,
-        content:
-          'Based on your requirements, here are some suggested destinations',
+        content: 'Based on your requirements, here are some suggested destinations',
       })
     })
-    .then(function() {
+    .then(function () {
       return botui.message.add({
         loading: true,
         delay: 400,
         content: 'Please select the one that you prefer',
       })
     })
-    .then(function() {
+    .then(function () {
       if (trip_style == 'adventure') {
         return botui.action.button({
-          action: [
-            { text: 'Thailand', value: 'thailand' },
-            { text: 'Europ', value: 'europ' },
-            { text: 'Bhutan', value: 'bhutan' },
-            { text: 'Australia', value: 'australia' },
-            { text: 'New Zeland', value: 'new zeland' },
+          action: [{
+              text: 'Thailand',
+              value: 'thailand'
+            },
+            {
+              text: 'Europ',
+              value: 'europ'
+            },
+            {
+              text: 'Bhutan',
+              value: 'bhutan'
+            },
+            {
+              text: 'Australia',
+              value: 'australia'
+            },
+            {
+              text: 'New Zeland',
+              value: 'new zeland'
+            },
           ],
         })
       } else if (trip_style == 'leisure') {
         return botui.action.button({
-          action: [
-            { text: 'Thailand', value: 'thailand' },
-            { text: 'Sri Lanka', value: 'srilanka' },
-            { text: 'Singapore', value: 'singapore' },
-            { text: 'Europe', value: 'europe' },
-            { text: 'Dubai', value: 'dubai' },
+          action: [{
+              text: 'Thailand',
+              value: 'thailand'
+            },
+            {
+              text: 'Sri Lanka',
+              value: 'srilanka'
+            },
+            {
+              text: 'Singapore',
+              value: 'singapore'
+            },
+            {
+              text: 'Europe',
+              value: 'europe'
+            },
+            {
+              text: 'Dubai',
+              value: 'dubai'
+            },
           ],
         })
       } else if (trip_style == 'hillStation') {
         return botui.action.button({
-          action: [
-            { text: 'Thailand', value: 'thailand' },
-            { text: 'Sri Lanka', value: 'srilanka' },
-            { text: 'Singapore', value: 'singapore' },
-            { text: 'Europe', value: 'europe' },
-            { text: 'Dubai', value: 'dubai' },
+          action: [{
+              text: 'Thailand',
+              value: 'thailand'
+            },
+            {
+              text: 'Sri Lanka',
+              value: 'srilanka'
+            },
+            {
+              text: 'Singapore',
+              value: 'singapore'
+            },
+            {
+              text: 'Europe',
+              value: 'europe'
+            },
+            {
+              text: 'Dubai',
+              value: 'dubai'
+            },
           ],
         })
       } else if (trip_style == 'romantic') {
         return botui.action.button({
-          action: [
-            { text: 'Bali', value: 'bali' },
-            { text: 'Italy', value: 'italy' },
-            { text: 'France', value: 'france' },
-            { text: 'Iceland', value: 'iceland' },
-            { text: 'Greece', value: 'greece' },
+          action: [{
+              text: 'Bali',
+              value: 'bali'
+            },
+            {
+              text: 'Italy',
+              value: 'italy'
+            },
+            {
+              text: 'France',
+              value: 'france'
+            },
+            {
+              text: 'Iceland',
+              value: 'iceland'
+            },
+            {
+              text: 'Greece',
+              value: 'greece'
+            },
           ],
         })
       } else if (trip_style == 'beaches') {
         return botui.action.button({
-          action: [
-            { text: 'Bali', value: 'bali' },
-            { text: 'Maldives', value: 'maldives' },
-            { text: 'Spain', value: 'spain' },
-            { text: 'Australia', value: 'australia' },
-            { text: 'Fiji', value: 'fiji' },
+          action: [{
+              text: 'Bali',
+              value: 'bali'
+            },
+            {
+              text: 'Maldives',
+              value: 'maldives'
+            },
+            {
+              text: 'Spain',
+              value: 'spain'
+            },
+            {
+              text: 'Australia',
+              value: 'australia'
+            },
+            {
+              text: 'Fiji',
+              value: 'fiji'
+            },
           ],
         })
       } else if (trip_style == 'nature') {
         return botui.action.button({
-          action: [
-            { text: 'America', value: 'america' },
-            { text: 'Greece', value: 'greece' },
-            { text: 'Croatia', value: 'croatia' },
-            { text: 'Italy', value: 'italy' },
+          action: [{
+              text: 'America',
+              value: 'america'
+            },
+            {
+              text: 'Greece',
+              value: 'greece'
+            },
+            {
+              text: 'Croatia',
+              value: 'croatia'
+            },
+            {
+              text: 'Italy',
+              value: 'italy'
+            },
           ],
         })
       }
     })
-    .then(function(res) {
+    .then(function (res) {
       user_destination = res.value
       console.log(user_destination)
     })
-    .then(function() {
+    .then(function () {
       ownPack_commonPart()
     })
 }
+
 function India() {
   botui.message
     .add({
@@ -438,11 +484,10 @@ function India() {
       delay: 1000,
       content: 'What kind of trip are you looking forward to go ?',
     })
-    .then(function() {
+    .then(function () {
       return botui.action
         .button({
-          action: [
-            {
+          action: [{
               text: '🚵 Adventure',
               value: 'adventure',
             },
@@ -468,96 +513,177 @@ function India() {
             },
           ],
         })
-        .then(function(res) {
+        .then(function (res) {
           trip_style = res.value
           console.log(trip_style)
         })
     })
-    .then(function() {
+    .then(function () {
       return botui.message.add({
         loading: true,
         delay: 400,
-        content:
-          'Based on your requirements, here are some suggested destinations',
+        content: 'Based on your requirements, here are some suggested destinations',
       })
     })
-    .then(function() {
+    .then(function () {
       return botui.message.add({
         loading: true,
         delay: 400,
         content: 'Please select the one that you prefer',
       })
     })
-    .then(function() {
+    .then(function () {
       if (trip_style == 'adventure') {
         return botui.action.button({
-          action: [
-            { text: 'Andaman', value: 'andaman' },
-            { text: 'Coorg', value: 'coorg' },
-            { text: 'Himachal', value: 'himachal' },
-            { text: 'Ooty', value: 'Ooty' },
-            { text: 'Ladakh', value: 'ladakh' },
+          action: [{
+              text: 'Andaman',
+              value: 'andaman'
+            },
+            {
+              text: 'Coorg',
+              value: 'coorg'
+            },
+            {
+              text: 'Himachal',
+              value: 'himachal'
+            },
+            {
+              text: 'Ooty',
+              value: 'Ooty'
+            },
+            {
+              text: 'Ladakh',
+              value: 'ladakh'
+            },
           ],
         })
       } else if (trip_style == 'leisure') {
         return botui.action.button({
-          action: [
-            { text: 'Kerala', value: 'kerala' },
-            { text: 'Andaman', value: 'andaman' },
-            { text: 'Himachal', value: 'himachal' },
-            { text: 'Ladakh', value: 'ladakh' },
-            { text: 'Kashmir', value: 'kashmir' },
+          action: [{
+              text: 'Kerala',
+              value: 'kerala'
+            },
+            {
+              text: 'Andaman',
+              value: 'andaman'
+            },
+            {
+              text: 'Himachal',
+              value: 'himachal'
+            },
+            {
+              text: 'Ladakh',
+              value: 'ladakh'
+            },
+            {
+              text: 'Kashmir',
+              value: 'kashmir'
+            },
           ],
         })
       } else if (trip_style == 'hillStation') {
         return botui.action.button({
-          action: [
-            { text: 'Kerala', value: 'kerala' },
-            { text: 'Kashmir', value: 'kashmir' },
-            { text: 'Ooty', value: 'ooty' },
-            { text: 'Himachal', value: 'himachal' },
-            { text: 'Assam', value: 'assam' },
+          action: [{
+              text: 'Kerala',
+              value: 'kerala'
+            },
+            {
+              text: 'Kashmir',
+              value: 'kashmir'
+            },
+            {
+              text: 'Ooty',
+              value: 'ooty'
+            },
+            {
+              text: 'Himachal',
+              value: 'himachal'
+            },
+            {
+              text: 'Assam',
+              value: 'assam'
+            },
           ],
         })
       } else if (trip_style == 'romantic') {
         return botui.action.button({
-          action: [
-            { text: 'Kerala', value: 'kerala' },
-            { text: 'Andaman', value: 'andaman' },
-            { text: 'Shimla', value: 'shimla' },
-            { text: 'Allepey', value: 'allepey' },
-            { text: 'Ooty', value: 'ooty' },
-            { text: 'Coorg', value: 'coorg' },
+          action: [{
+              text: 'Kerala',
+              value: 'kerala'
+            },
+            {
+              text: 'Andaman',
+              value: 'andaman'
+            },
+            {
+              text: 'Shimla',
+              value: 'shimla'
+            },
+            {
+              text: 'Allepey',
+              value: 'allepey'
+            },
+            {
+              text: 'Ooty',
+              value: 'ooty'
+            },
+            {
+              text: 'Coorg',
+              value: 'coorg'
+            },
           ],
         })
       } else if (trip_style == 'beaches') {
         return botui.action.button({
-          action: [
-            { text: 'Goa', value: 'goa' },
-            { text: 'Andaman', value: 'andaman' },
-            { text: 'Kerala', value: 'kerala' },
+          action: [{
+              text: 'Goa',
+              value: 'goa'
+            },
+            {
+              text: 'Andaman',
+              value: 'andaman'
+            },
+            {
+              text: 'Kerala',
+              value: 'kerala'
+            },
           ],
         })
       } else if (trip_style == 'nature') {
         return botui.action.button({
-          action: [
-            { text: 'Kerala', value: 'kerala' },
-            { text: 'Andaman', value: 'andaman' },
-            { text: 'Assam', value: 'assam' },
-            { text: 'Ladakh', value: 'Ladakh' },
-            { text: 'Kashmir', value: 'kashmir' },
+          action: [{
+              text: 'Kerala',
+              value: 'kerala'
+            },
+            {
+              text: 'Andaman',
+              value: 'andaman'
+            },
+            {
+              text: 'Assam',
+              value: 'assam'
+            },
+            {
+              text: 'Ladakh',
+              value: 'Ladakh'
+            },
+            {
+              text: 'Kashmir',
+              value: 'kashmir'
+            },
           ],
         })
       }
     })
-    .then(function(res) {
+    .then(function (res) {
       user_destination = res.value
       console.log(user_destination)
     })
-    .then(function() {
+    .then(function () {
       ownPack_commonPart()
     })
 }
+
 function ownPack_commonPart() {
   return botui.message
     .add({
@@ -565,11 +691,10 @@ function ownPack_commonPart() {
       delay: 400,
       content: 'No of people in the trip ?',
     })
-    .then(function() {
+    .then(function () {
       return botui.action
         .button({
-          action: [
-            {
+          action: [{
               text: '1',
               value: '1',
             },
@@ -595,22 +720,21 @@ function ownPack_commonPart() {
             },
           ],
         })
-        .then(function(res) {
+        .then(function (res) {
           no_of_people = res.value
           console.log(no_of_people)
         })
     })
-    .then(function() {
+    .then(function () {
       return botui.message.add({
         loading: true,
         delay: 400,
         content: 'Do you have a tentative date when are you leaving ?',
       })
     })
-    .then(function() {
+    .then(function () {
       return botui.action.button({
-        action: [
-          {
+        action: [{
             text: '👍 Yes',
             value: 'yes',
           },
@@ -621,7 +745,7 @@ function ownPack_commonPart() {
         ],
       })
     })
-    .then(function(res) {
+    .then(function (res) {
       if (res.value == 'yes') {
         return botui.action.text({
           action: {
@@ -636,10 +760,9 @@ function ownPack_commonPart() {
             delay: 400,
             content: 'Select the month which you plan to go on trip',
           })
-          .then(function() {
+          .then(function () {
             return botui.action.button({
-              action: [
-                {
+              action: [{
                   text: 'Jan',
                   value: 'jan',
                 },
@@ -692,21 +815,20 @@ function ownPack_commonPart() {
           })
       }
     })
-    .then(function(res) {
+    .then(function (res) {
       tentative_date = res.value
       console.log(tentative_date)
     })
-    .then(function() {
+    .then(function () {
       return botui.message.add({
         loading: true,
         delay: 400,
         content: 'Please enter your trip duration',
       })
     })
-    .then(function() {
+    .then(function () {
       return botui.action.button({
-        action: [
-          {
+        action: [{
             text: 'one day',
             value: '1',
           },
@@ -733,18 +855,17 @@ function ownPack_commonPart() {
         ],
       })
     })
-    .then(function(res) {
+    .then(function (res) {
       trip_duration = res.value
       console.log(trip_duration)
     })
-    .then(function() {
+    .then(function () {
       return botui.action.select({
         action: {
           placeholder: 'Select your required facilities',
           //value: 'TR,EN', // Selected value or Selected Array object. Example: [{value: "TR", text : "Türkçe" },{value: "EN", text : "English" }]
           multipleselect: true, // Default: false
-          options: [
-            {
+          options: [{
               value: 'hotel',
               text: '🏨 Hotel',
             },
@@ -764,7 +885,7 @@ function ownPack_commonPart() {
         },
       })
     })
-    .then(function(res) {
+    .then(function (res) {
       req_facilities = res.value
       console.log(req_facilities)
       if (
@@ -778,11 +899,10 @@ function ownPack_commonPart() {
             delay: 400,
             content: 'Which type of hotel do you prefer?',
           })
-          .then(function() {
+          .then(function () {
             return botui.action
               .button({
-                action: [
-                  {
+                action: [{
                     text: '⭐',
                     value: 'one star',
                   },
@@ -804,7 +924,7 @@ function ownPack_commonPart() {
                   },
                 ],
               })
-              .then(function(res) {
+              .then(function (res) {
                 hotel_preference = res.value
                 console.log(hotel_preference)
               })
@@ -821,11 +941,10 @@ function ownPack_commonPart() {
             delay: 400,
             content: 'Which mode of transport do you prefer?',
           })
-          .then(function() {
+          .then(function () {
             return botui.action
               .button({
-                action: [
-                  {
+                action: [{
                     text: '🚄 Train',
                     value: 'train',
                   },
@@ -839,7 +958,7 @@ function ownPack_commonPart() {
                   },
                 ],
               })
-              .then(function(res) {
+              .then(function (res) {
                 transport_type = res.value
                 console.log(transport_type)
               })
@@ -861,11 +980,10 @@ function ownPack_commonPart() {
             delay: 400,
             content: 'Which mode of transport do you prefer?',
           })
-          .then(function() {
+          .then(function () {
             return botui.action
               .button({
-                action: [
-                  {
+                action: [{
                     text: '🚄 Train',
                     value: 'train',
                   },
@@ -879,23 +997,22 @@ function ownPack_commonPart() {
                   },
                 ],
               })
-              .then(function(res) {
+              .then(function (res) {
                 transport_type = res.value
                 console.log(transport_type)
               })
           })
-          .then(function() {
+          .then(function () {
             return botui.message
               .add({
                 loading: true,
                 delay: 400,
                 content: 'Which type of hotel do you prefer ?',
               })
-              .then(function() {
+              .then(function () {
                 return botui.action
                   .button({
-                    action: [
-                      {
+                    action: [{
                         text: '⭐',
                         value: 'one star',
                       },
@@ -917,7 +1034,7 @@ function ownPack_commonPart() {
                       },
                     ],
                   })
-                  .then(function(res) {
+                  .then(function (res) {
                     hotel_preference = res.value
                     console.log(hotel_preference)
                     console.log(first_contact_deet)
@@ -926,7 +1043,7 @@ function ownPack_commonPart() {
           })
       }
     })
-    .then(function() {
+    .then(function () {
       if (first_contact_deet == 'yes') {
         contact_summary()
       } else {
@@ -936,7 +1053,7 @@ function ownPack_commonPart() {
             delay: 400,
             content: 'Please enter your mobile number',
           })
-          .then(function() {
+          .then(function () {
             return botui.action
               .text({
                 action: {
@@ -944,19 +1061,19 @@ function ownPack_commonPart() {
                   placeholder: 'Enter your mobile number here',
                 },
               })
-              .then(function(res) {
+              .then(function (res) {
                 user_number = res.value
                 console.log(user_number)
               })
           })
-          .then(function() {
+          .then(function () {
             return botui.message
               .add({
                 loading: true,
                 delay: 400,
                 content: 'Please enter your email-id',
               })
-              .then(function() {
+              .then(function () {
                 return botui.action
                   .text({
                     action: {
@@ -964,20 +1081,20 @@ function ownPack_commonPart() {
                       placeholder: 'Enter your mail id here',
                     },
                   })
-                  .then(function(res) {
+                  .then(function (res) {
                     user_mail = res.value
                     console.log(user_mail)
                   })
               })
           })
-          .then(function() {
+          .then(function () {
             return botui.message.add({
               loading: true,
               delay: 400,
               content: 'Thanks for your details',
             })
           })
-          .then(function() {
+          .then(function () {
             contact_summary()
           })
       }
@@ -991,11 +1108,10 @@ function contact_summary() {
       delay: 400,
       content: 'At what time do you want our expert to contact you ?',
     })
-    .then(function() {
+    .then(function () {
       botui.action
         .button({
-          action: [
-            {
+          action: [{
               text: '11AM - 1PM',
               value: '11AM - 1PM',
             },
@@ -1013,7 +1129,7 @@ function contact_summary() {
             },
           ],
         })
-        .then(function(res) {
+        .then(function (res) {
           cust_call_time = res.value
           console.log(cust_call_time)
           if (res.value == 'otherTime') {
@@ -1023,7 +1139,7 @@ function contact_summary() {
                 delay: 400,
                 content: 'Please enter the time you have in mind ',
               })
-              .then(function() {
+              .then(function () {
                 return botui.action
                   .text({
                     action: {
@@ -1031,26 +1147,24 @@ function contact_summary() {
                       placeholder: 'Enter your time here',
                     },
                   })
-                  .then(function(res) {
+                  .then(function (res) {
                     cust_call_time = res.value
                     console.log(cust_call_time)
                   })
               })
           }
         })
-        .then(function() {
+        .then(function () {
           return botui.message
             .add({
               loading: true,
               delay: 400,
-              content:
-                'Would you like to have the summary of your package to your mobile phone ?',
+              content: 'Would you like to have the summary of your package to your mobile phone ?',
             })
-            .then(function() {
+            .then(function () {
               return botui.action
                 .button({
-                  action: [
-                    {
+                  action: [{
                       text: '👍 Yes',
                       value: 'yes_summary',
                     },
@@ -1060,7 +1174,7 @@ function contact_summary() {
                     },
                   ],
                 })
-                .then(function(res) {
+                .then(function (res) {
                   summary_req = res.value
                   console.log(summary_req)
                   if (res.value == 'yes_summary') {
@@ -1068,21 +1182,18 @@ function contact_summary() {
                       .add({
                         loading: true,
                         delay: 400,
-                        content:
-                          'Noted, The summary will be sent to your mobile phone',
+                        content: 'Noted, The summary will be sent to your mobile phone',
                       })
-                      .then(function() {
+                      .then(function () {
                         return botui.message.add({
-                          content:
-                            'Thank you for your patience, Our expert will contact you',
+                          content: 'Thank you for your patience, Our expert will contact you',
                         })
                       })
                   } else {
                     botui.message.add({
                       loading: true,
                       delay: 400,
-                      content:
-                        'Thank you for your patience, Our expert will contact you',
+                      content: 'Thank you for your patience, Our expert will contact you',
                     })
                   }
                 })
