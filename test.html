@@ -15,10 +15,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/botui/build/botui-theme-default.css"
     />
-    <link rel="stylesheet" href="./chatbot style/botui.scss" />
-    <link rel="stylesheet" href="./chatbot style/default.scss" />
-    <link rel="stylesheet" href="./chatbot style/normal.scss" />
-    <link rel="stylesheet" href="./chatbot style/botui-theme-default.css" />
+    <link rel="stylesheet" href="./chatbot _style/botui.scss" />
+    <link rel="stylesheet" href="./chatbot _style/default.scss" />
+    <link rel="stylesheet" href="./chatbot _style/normal.scss" />
+    <link rel="stylesheet" href="./chatbot _style/botui-theme-default.css" />
   </head>
 
   <body>
@@ -50,43 +50,43 @@
         trip_style,
         location_domain
 
-        var app = document.querySelector('.botui-app-container')
-var con = document.querySelector('.botui-container')
+      var app = document.querySelector('.botui-app-container')
+      var con = document.querySelector('.botui-container')
 
-function debounce(func, wait, immediate) {
-  var timeout;
-  return function executedFunction() {
-    var context = this;
-    var args = arguments;
-    var later = function () {
-      timeout = null;
-      if (!immediate) func.apply(context, args);
-    };
-    var callNow = immediate && !timeout;
-    clearTimeout(timeout);
-    timeout = setTimeout(later, wait);
-    if (callNow) func.apply(context, args);
-  };
-};
-const doTheScroll = (el) => {
-  el.scrollTop = el.scrollHeight - el.offsetHeight
-}
-let prev_scroll_top = null
-const debounced = debounce(doTheScroll, 100, false)
-con.addEventListener('scroll', (e) => {
-  e.stopPropagation()
-  const curr_scroll_top = e.target.scrollTop
-  if (!prev_scroll_top) {
-    prev_scroll_top = curr_scroll_top
-    return
-  }
-  const diff = curr_scroll_top - prev_scroll_top
-  if (diff > 0) {
-    debounced(e.target)
-  }
-  prev_scroll_top = curr_scroll_top
-  console.log('diff', diff)
-})
+      function debounce(func, wait, immediate) {
+        var timeout
+        return function executedFunction() {
+          var context = this
+          var args = arguments
+          var later = function() {
+            timeout = null
+            if (!immediate) func.apply(context, args)
+          }
+          var callNow = immediate && !timeout
+          clearTimeout(timeout)
+          timeout = setTimeout(later, wait)
+          if (callNow) func.apply(context, args)
+        }
+      }
+      const doTheScroll = el => {
+        el.scrollTop = el.scrollHeight - el.offsetHeight
+      }
+      let prev_scroll_top = null
+      const debounced = debounce(doTheScroll, 100, false)
+      con.addEventListener('scroll', e => {
+        e.stopPropagation()
+        const curr_scroll_top = e.target.scrollTop
+        if (!prev_scroll_top) {
+          prev_scroll_top = curr_scroll_top
+          return
+        }
+        const diff = curr_scroll_top - prev_scroll_top
+        if (diff > 0) {
+          debounced(e.target)
+        }
+        prev_scroll_top = curr_scroll_top
+        console.log('diff', diff)
+      })
 
       var transport_type = null
       var hotel_preference = null
@@ -95,8 +95,6 @@ con.addEventListener('scroll', (e) => {
       const $optionscontainer = document.querySelector(
         '.botui-actions-container',
       )
-
-  
 
       // Start Bot
       // First Messages
@@ -138,6 +136,11 @@ con.addEventListener('scroll', (e) => {
           if (res.value == 'yes') {
             cus_deet()
           } else {
+            const dateInstance = new Date()
+            const nanoseconds = dateInstance.getTime()
+            // When they say no to number we are setting the current epoch time as the unique id
+            user_number = 'temp-user-' + nanoseconds
+            writeUserData(user_number)
             questions()
           }
         })
@@ -155,9 +158,10 @@ con.addEventListener('scroll', (e) => {
                   placeholder: 'Enter your mobile number here',
                 },
               })
-              .then(function(res) {
-                user_number = res.value
-                console.log(user_number)
+              .then(({ value }) => {
+                console.log('Number: ', value)
+                user_number = value
+                writeUserData(user_number)
               })
           })
           .then(function() {
@@ -176,6 +180,7 @@ con.addEventListener('scroll', (e) => {
                   .then(function(res) {
                     user_mail = res.value
                     console.log(user_mail)
+                    writeUserData(user_number, { user_mail })
                   })
               })
           })
@@ -216,6 +221,7 @@ con.addEventListener('scroll', (e) => {
           .then(function(res) {
             trip_type = res.value
             console.log(trip_type)
+            writeUserData(user_number, { trip_type })
           })
           .then(function() {
             return botui.message
@@ -239,6 +245,7 @@ con.addEventListener('scroll', (e) => {
               .then(function(res) {
                 package_type = res.value
                 console.log(trip_type)
+                writeUserData(user_number, { package_type })
                 if (res.value == 'existingPackage') {
                   return botui.message.add({
                     type: 'html',
@@ -289,6 +296,7 @@ con.addEventListener('scroll', (e) => {
                 })
                 .then(function(res) {
                   user_destination = res.value
+                  writeUserData(user_number, { user_destination })
                   botui.message.add({
                     content: 'Your destination is ' + user_destination,
                   })
@@ -366,6 +374,7 @@ con.addEventListener('scroll', (e) => {
               })
               .then(function(res) {
                 trip_style = res.value
+                writeUserData(user_number, { trip_style })
                 console.log(trip_style)
               })
           })
@@ -444,6 +453,7 @@ con.addEventListener('scroll', (e) => {
           })
           .then(function(res) {
             user_destination = res.value
+            writeUserData(user_number, { user_destination })
             console.log(user_destination)
           })
           .then(function() {
@@ -488,6 +498,7 @@ con.addEventListener('scroll', (e) => {
               })
               .then(function(res) {
                 trip_style = res.value
+                writeUserData(user_number, { trip_style })
                 console.log(trip_style)
               })
           })
@@ -566,6 +577,7 @@ con.addEventListener('scroll', (e) => {
           })
           .then(function(res) {
             user_destination = res.value
+            writeUserData(user_number, { user_destination })
             console.log(user_destination)
           })
           .then(function() {
@@ -610,6 +622,7 @@ con.addEventListener('scroll', (e) => {
               })
               .then(function(res) {
                 no_of_people = res.value
+                writeUserData(user_number, { no_of_people })
                 console.log(no_of_people)
               })
           })
@@ -703,6 +716,7 @@ con.addEventListener('scroll', (e) => {
           })
           .then(function(res) {
             tentative_date = res.value
+            writeUserData(user_number, { tentative_date })
             console.log(tentative_date)
           })
           .then(function() {
@@ -742,6 +756,7 @@ con.addEventListener('scroll', (e) => {
           })
           .then(function(res) {
             trip_duration = res.value
+            writeUserData(user_number, { trip_duration })
             console.log(trip_duration)
           })
           .then(function() {
@@ -773,6 +788,7 @@ con.addEventListener('scroll', (e) => {
           })
           .then(function(res) {
             req_facilities = res.value
+            writeUserData(user_number, { req_facilities })
             console.log(req_facilities)
             if (
               res.value == 'hotel' ||
@@ -811,6 +827,7 @@ con.addEventListener('scroll', (e) => {
                     })
                     .then(function(res) {
                       hotel_preference = res.value
+                      writeUserData(user_number, { hotel_preference })
                       console.log(hotel_preference)
                     })
                 })
@@ -819,102 +836,106 @@ con.addEventListener('scroll', (e) => {
               res.value == 'transport' ||
               res.value == 'cab, transport' ||
               res.value == 'transport, cab'
-            ) {
-              return botui.message
-                .add({
-                  content: 'Which mode of transport do you prefer?',
-                })
-                .then(function() {
-                  return botui.action
-                    .button({
-                      action: [
-                        {
-                          text: 'Train',
-                          value: 'train',
-                        },
-                        {
-                          text: 'Flight',
-                          value: 'flight',
-                        },
-                        {
-                          text: 'Bus',
-                          value: 'bus',
-                        },
-                      ],
-                    })
-                    .then(function(res) {
-                      transport_type = res.value
-                      console.log(transport_type)
-                    })
-                })
-            }
-            if (res.value.indexOf('transport') > -1) {
-              return botui.message
-                .add({
-                  content: 'Which mode of transport do you prefer?',
-                })
-                .then(function() {
-                  return botui.action
-                    .button({
-                      action: [
-                        {
-                          text: 'Train',
-                          value: 'train',
-                        },
-                        {
-                          text: 'Flight',
-                          value: 'flight',
-                        },
-                        {
-                          text: 'Bus',
-                          value: 'bus',
-                        },
-                      ],
-                    })
-                    .then(function(res) {
-                      transport_type = res.value
-                      console.log(transport_type)
-                    })
-                })
-                .then(function() {
-                  return botui.message
-                    .add({
-                      content: 'Which type of hotel do you prefer ?',
-                    })
-                    .then(function() {
-                      return botui.action
-                        .button({
-                          action: [
-                            {
-                              text: '1 Star',
-                              value: 'one star',
-                            },
-                            {
-                              text: '2 Star',
-                              value: 'two star',
-                            },
-                            {
-                              text: '3 Star',
-                              value: 'three star',
-                            },
-                            {
-                              text: '4 Star',
-                              value: 'four star',
-                            },
-                            {
-                              text: '5 Star',
-                              value: 'five star',
-                            },
-                          ],
-                        })
-                        .then(function(res) {
-                          hotel_preference = res.value
-                          console.log(hotel_preference)
-                          console.log(first_contact_deet)
-                        })
-                    })
-                })
-            }
+            )
+              if (res.value.indexOf('transport') > -1) {
+                // ) {
+                //   return botui.message
+                //     .add({
+                //       content: 'Which mode of transport do you prefer?',
+                //     })
+                //     .then(function() {
+                //       return botui.action
+                //         .button({
+                //           action: [
+                //             {
+                //               text: 'Train',
+                //               value: 'train',
+                //             },
+                //             {
+                //               text: 'Flight',
+                //               value: 'flight',
+                //             },
+                //             {
+                //               text: 'Bus',
+                //               value: 'bus',
+                //             },
+                //           ],
+                //         })
+                //         .then(function(res) {
+                //           transport_type = res.value
+                //           writeUserData(user_number,{transport_type})
+                //           console.log(transport_type)
+                //         })
+                //     })
+                // }
+                return botui.message
+                  .add({
+                    content: 'Which mode of transport do you prefer?',
+                  })
+                  .then(function() {
+                    return botui.action
+                      .button({
+                        action: [
+                          {
+                            text: 'Train',
+                            value: 'train',
+                          },
+                          {
+                            text: 'Flight',
+                            value: 'flight',
+                          },
+                          {
+                            text: 'Bus',
+                            value: 'bus',
+                          },
+                        ],
+                      })
+                      .then(function(res) {
+                        transport_type = res.value
+                        writeUserData(user_number, { transport_type })
+                        console.log(transport_type)
+                      })
+                  })
+                  .then(function() {
+                    return botui.message
+                      .add({
+                        content: 'Which type of hotel do you prefer ?',
+                      })
+                      .then(function() {
+                        return botui.action
+                          .button({
+                            action: [
+                              {
+                                text: '1 Star',
+                                value: 'one star',
+                              },
+                              {
+                                text: '2 Star',
+                                value: 'two star',
+                              },
+                              {
+                                text: '3 Star',
+                                value: 'three star',
+                              },
+                              {
+                                text: '4 Star',
+                                value: 'four star',
+                              },
+                              {
+                                text: '5 Star',
+                                value: 'five star',
+                              },
+                            ],
+                          })
+                          .then(function(res) {
+                            hotel_preference = res.value
+                            writeUserData(user_number, { hotel_preference })
+                            console.log(hotel_preference)
+                            console.log(first_contact_deet)
+                          })
+                      })
+                  })
+              }
           })
           .then(function() {
             if (first_contact_deet == 'yes') {
@@ -932,9 +953,30 @@ con.addEventListener('scroll', (e) => {
                         placeholder: 'Enter your mobile number here',
                       },
                     })
-                    .then(function(res) {
-                      user_number = res.value
-                      console.log(user_number)
+                    .then(function({ value }) {
+                      // right now user number is temp number
+                      // so delete temporary data
+                      deleteUserData(user_number)
+
+                      // set user_number to current value
+                      user_number = value
+
+                      const allDets = {
+                        trip_type,
+                        package_type,
+                        user_destination,
+                        no_of_people,
+                        tentative_date,
+                        trip_duration,
+                        req_facilities,
+                        transport_type,
+                        hotel_preference,
+                        first_contact_deet,
+                        trip_style,
+                        location_domain,
+                      }
+                      writeUserData(user_number, allDets)
+                      console.log('user: ', user_number, allDets)
                     })
                 })
                 .then(function() {
@@ -1064,25 +1106,19 @@ con.addEventListener('scroll', (e) => {
                         }
                       })
                   })
-                  .then(res => {
-                    if (user_number != null) {
-                      firebaseOps.writeUser(
-                        user_number,
-                        user_mail,
-                        trip_type,
-                        user_destination,
-                        no_of_people,
-                        tentative_date,
-                        trip_duration,
-                        package_type,
-                        req_facilities,
-                        hotel_preference,
-                        transport_type,
-                        cust_call_time,
-                        summary_req,
-                      )
-                    }
-                  })
+                // .then(res => {
+                //   if (user_number != null) {
+                //     firebaseOps.writeUser(user_number, user_mail)
+                //     firebaseOps.writedetails(
+                //       trip_type,
+                //       user_destination,
+                //       no_of_people,
+                //       tentative_date,
+                //       trip_duration,
+                //       package_type,
+                //     )
+                //   }
+                // })
               })
           })
       }
