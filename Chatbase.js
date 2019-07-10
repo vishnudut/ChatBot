@@ -13,7 +13,7 @@ firebase.initializeApp(firebaseConfig)
 
 const database = firebase.database()
 
-const firebaseOps = {}
+// const firebaseOps = {}
 
 const states = {
   user: {
@@ -37,49 +37,66 @@ const states = {
   },
 }
 
-firebaseOps.writeUser = (user_number, user_mail) => {
-  const users = database.ref()
-  const newUser = users.push()
-  newUser.set({
-    number: user_number,
-    mailid: user_mail,
-  })
+writeUserData(9876543)
+
+{
+  number: 9876543
 }
 
-firebaseOps.writedetails = (
-  trip_type,
-  user_destination,
-  no_of_people,
-  tentative_date,
-  trip_duration,
-  package_type,
-) => {
-  const users = database.ref('/users')
-  const newUser = users.push()
-  newUser.set({
-    triptype: trip_type,
-    packagetype: package_type,
-    destination: user_destination,
-    people: no_of_people,
-    dates: tentative_date,
-    duration: trip_duration,
-  })
+function writeUserData(number, obj = { number }) {
+  firebase
+    .database()
+    .ref('users/' + number)
+    .update(obj)
 }
 
-firebaseOps.writeReq = (
-  req_facilities,
-  hotel_preference,
-  transport_type,
-  cust_call_time,
-  summary_req,
-) => {
-  const users = database.ref('/users')
-  const newUser = users.push()
-  newUser.set({
-    facilties: req_facilities,
-    hotel: hotel_preference,
-    transport: transport_type,
-    calltime: cust_call_time,
-    summary: summary_req,
-  })
+function deleteUserData(number) {
+  database.ref('users/' + number).remove()
 }
+
+// firebaseOps.writeUser = user_number => {
+//   const users = database.ref( )
+//   const newUser = users.push()
+//   newUser.set({
+//     number: user_number,
+//     // mailid: user_mail,
+//   })
+// }
+
+// firebaseOps.writedetails = (
+//   trip_type,
+//   user_destination,
+//   no_of_people,
+//   tentative_date,
+//   trip_duration,
+//   package_type,
+// ) => {
+//   const users = database.ref('/users')
+//   const newUser = users.push()
+//   newUser.set({
+//     triptype: trip_type,
+//     packagetype: package_type,
+//     destination: user_destination,
+//     people: no_of_people,
+//     dates: tentative_date,
+//     duration: trip_duration,
+//   })
+// }
+
+// firebaseOps.writeReq = (
+//   req_facilities,
+//   hotel_preference,
+//   transport_type,
+//   cust_call_time,
+//   summary_req,
+// ) => {
+//   const users = database.ref('/users')
+//   const newUser = users.push()
+//   newUser.set({
+//     facilties: req_facilities,
+//     hotel: hotel_preference,
+//     transport: transport_type,
+//     calltime: cust_call_time,
+//     summary: summary_req,
+//   })
+// }
